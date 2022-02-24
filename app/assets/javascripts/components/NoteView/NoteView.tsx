@@ -12,7 +12,6 @@ import {
   ComponentMutator,
   PayloadSource,
   ComponentViewer,
-  ComponentManagerEvent,
   TransactionalMutation,
   ItemMutator,
   ProposedSecondsToDeferUILevelSessionExpirationDuringActiveInteraction,
@@ -21,6 +20,10 @@ import {
 import { debounce, isDesktopApplication } from '@/utils';
 import { KeyboardModifier, KeyboardKey } from '@/services/ioService';
 import { EventSource } from '@/ui_models/app_state';
+import {
+  ClassicFileReader,
+  StreamingFileReader,
+} from '@standardnotes/filepicker';
 import {
   STRING_DELETE_PLACEHOLDER_ATTEMPT,
   STRING_DELETE_LOCKED_ATTEMPT,
@@ -924,6 +927,42 @@ export class NoteView extends PureComponent<Props, State> {
     }
   };
 
+  uploadNewFile = async () => {
+    const operation = await this.application.files.beginNewFileUpload();
+    const minimumChunkSize = this.application.files.minimumChunkSize();
+
+    const onChunk = async (
+      chunk: Uint8Array,
+      index: number,
+      isLast: boolean
+    ) => {
+      await this.application.files.pushBytesForUpload(
+        operation,
+        chunk,
+        index,
+        isLast
+      );
+    };
+
+    const picker = StreamingFileReader.available()
+      ? new StreamingFileReader(minimumChunkSize, onChunk)
+      : new ClassicFileReader(minimumChunkSize, onChunk);
+
+    console.log('Using picker', picker);
+
+    const fileResult = await picker.selectFileAndStream();
+
+    const fileObj = await this.application.files.finishUpload(
+      operation,
+      fileResult.name,
+      fileResult.ext
+    );
+
+    this.application.alertService.alert(
+      `Successfully uploaded file ${fileObj.nameWithExt}`
+    );
+  };
+
   render() {
     if (this.state.showProtectedWarning) {
       return (
@@ -1026,6 +1065,9 @@ export class NoteView extends PureComponent<Props, State> {
                         <div className="desc">{this.state.noteStatus.desc}</div>
                       )}
                     </div>
+                  </div>
+                  <div className="mr-3">
+                    <button onClick={this.uploadNewFile}>Upload</button>
                   </div>
                   <div className="mr-3">
                     <ChangeEditorButton

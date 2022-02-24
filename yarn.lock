@@ -2400,6 +2400,11 @@
     "@standardnotes/auth" "^3.16.5"
     "@standardnotes/common" "^1.14.1"
 
+"@standardnotes/filepicker@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@standardnotes/filepicker/-/filepicker-1.0.1.tgz#233c138cd5e53f4403e9d7cd907577647f5de15a"
+  integrity sha512-TcdZcI1KokLW/TsHYUXC5hsQdgGzJwmnHtSe2u4CQfrPyzUqYNXGlj/MyyJEvzvw/bMrJ1L5wM6x2s0ww+oa8w==
+
 "@standardnotes/services@^1.1.1":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@standardnotes/services/-/services-1.1.1.tgz#96065a8144c6f0d7695d7aedb0e10b8a9341a1b0"
