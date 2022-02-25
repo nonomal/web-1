@@ -8,7 +8,13 @@ import {
   DisclosureButton,
   DisclosurePanel,
 } from '@reach/disclosure';
-import { SNApplication, SNNote } from '@standardnotes/snjs';
+import {
+  ContentType,
+  SNApplication,
+  SNFile,
+  SNNote,
+} from '@standardnotes/snjs';
+import { StreamingFileSaver } from '@standardnotes/filepicker';
 import { WebApplication } from '@/ui_models/application';
 import { KeyboardModifier } from '@/services/ioService';
 import { FunctionComponent } from 'preact';
@@ -183,6 +189,44 @@ const SpellcheckOptions: FunctionComponent<{
           Spellcheck cannot be controlled for this editor.
         </p>
       )}
+    </div>
+  );
+};
+
+const Files: FunctionComponent<{
+  appState: AppState;
+}> = ({ appState }) => {
+  const files = appState.application.getItems(ContentType.File) as SNFile[];
+
+  const downloadFile = async (file: SNFile) => {
+    console.log('Downloading file', file.nameWithExt);
+    const saver = new StreamingFileSaver(file.nameWithExt);
+    await saver.selectFileToSaveTo();
+
+    await appState.application.files.downloadFile(
+      file,
+      async (decryptedBytes: Uint8Array) => {
+        console.log(`Pushing ${decryptedBytes.length} decrypted bytes to disk`);
+        await saver.pushBytes(decryptedBytes);
+      }
+    );
+    await saver.finish();
+  };
+
+  return (
+    <div className="flex flex-col">
+      {files.map((file) => {
+        return (
+          <button
+            className="sn-dropdown-item justify-between px-3 py-1"
+            onClick={() => {
+              downloadFile(file);
+            }}
+          >
+            {file.nameWithExt}
+          </button>
+        );
+      })}
     </div>
   );
 };
@@ -371,6 +415,7 @@ export const NotesOptions = observer(
             <div className="min-h-1px my-2 bg-border"></div>
           </>
         )}
+        <Files appState={appState} />
         <button
           className="sn-dropdown-item justify-between"
           onClick={() => {
