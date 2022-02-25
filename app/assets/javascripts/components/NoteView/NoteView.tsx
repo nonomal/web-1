@@ -928,39 +928,7 @@ export class NoteView extends PureComponent<Props, State> {
   };
 
   uploadNewFile = async () => {
-    const operation = await this.application.files.beginNewFileUpload();
-    const minimumChunkSize = this.application.files.minimumChunkSize();
-
-    const onChunk = async (
-      chunk: Uint8Array,
-      index: number,
-      isLast: boolean
-    ) => {
-      await this.application.files.pushBytesForUpload(
-        operation,
-        chunk,
-        index,
-        isLast
-      );
-    };
-
-    const picker = StreamingFileReader.available()
-      ? new StreamingFileReader(minimumChunkSize, onChunk)
-      : new ClassicFileReader(minimumChunkSize, onChunk);
-
-    console.log('Using picker', picker);
-
-    const fileResult = await picker.selectFileAndStream();
-
-    const fileObj = await this.application.files.finishUpload(
-      operation,
-      fileResult.name,
-      fileResult.ext
-    );
-
-    this.application.alertService.alert(
-      `Successfully uploaded file ${fileObj.nameWithExt}`
-    );
+    this.appState.files.uploadNewFile();
   };
 
   render() {

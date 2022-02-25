@@ -199,18 +199,7 @@ const Files: FunctionComponent<{
   const files = appState.application.getItems(ContentType.File) as SNFile[];
 
   const downloadFile = async (file: SNFile) => {
-    console.log('Downloading file', file.nameWithExt);
-    const saver = new StreamingFileSaver(file.nameWithExt);
-    await saver.selectFileToSaveTo();
-
-    await appState.application.files.downloadFile(
-      file,
-      async (decryptedBytes: Uint8Array) => {
-        console.log(`Pushing ${decryptedBytes.length} decrypted bytes to disk`);
-        await saver.pushBytes(decryptedBytes);
-      }
-    );
-    await saver.finish();
+    return appState.files.downloadFile(file);
   };
 
   return (
