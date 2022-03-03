@@ -46,7 +46,8 @@ export class FilesState {
       ? new StreamingFileReader(minimumChunkSize, onChunk)
       : new ClassicFileReader(minimumChunkSize, onChunk);
 
-    const fileResult = await picker.selectFileAndStream();
+    await picker.selectFile();
+    const fileResult = await picker.beginReadingFile();
 
     const fileObj = await this.application.files.finishUpload(
       operation,
