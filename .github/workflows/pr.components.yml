@@ -1,0 +1,39 @@
+name: Components PR
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - main
+    paths:
+      - packages/components/**
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Lint components
+        run: yarn lint
+        working-directory: packages/components
+
+      - name: Build components
+        run: yarn build:components
+
+      - name: Test components
+        run: yarn test
+        working-directory: packages/components
+
+      - name: Lint all
+        run: yarn lint
+      - name: Build all
+        run: yarn build:all
+      - name: Test all
+        run: yarn test
