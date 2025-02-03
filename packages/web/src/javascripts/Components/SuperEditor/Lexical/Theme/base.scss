@@ -1,0 +1,42 @@
+/**
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
+#blocks-editor {
+  .editor {
+    height: 100%;
+    position: relative;
+  }
+
+  .ltr {
+    text-align: left;
+  }
+
+  .rtl {
+    text-align: right;
+  }
+
+  hr {
+    padding: 2px 0px;
+    border: none;
+    margin: 1em 0;
+    cursor: pointer;
+  }
+
+  hr:after {
+    content: '';
+    display: block;
+    height: 2px;
+    background-color: var(--sn-stylekit-secondary-background-color);
+    line-height: 2px;
+  }
+
+  hr.selected {
+    outline: 2px solid var(--sn-stylekit-info-color);
+    user-select: none;
+  }
+}

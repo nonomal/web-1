@@ -1,0 +1,123 @@
+:root {
+  --lexical-ordered-list-left-margin: 16px;
+}
+.monospace-font {
+  --lexical-ordered-list-left-margin: 42px;
+}
+@for $i from 1 through 5 {
+  .Lexical__ol#{$i} {
+    padding: 0;
+    margin: 0;
+    margin-left: var(--lexical-ordered-list-left-margin);
+    list-style-position: outside;
+
+    &.Lexical__rtl {
+      margin-left: 0;
+      margin-right: var(--lexical-ordered-list-left-margin);
+    }
+  }
+}
+.Lexical__ol2 {
+  list-style-type: upper-alpha;
+}
+.Lexical__ol3 {
+  list-style-type: lower-alpha;
+}
+.Lexical__ol4 {
+  list-style-type: upper-roman;
+}
+.Lexical__ol5 {
+  list-style-type: lower-roman;
+}
+.Lexical__ul {
+  padding: 0;
+  margin: 0;
+  margin-left: 16px;
+  list-style-position: outside;
+
+  &.Lexical__rtl {
+    margin-left: 0;
+    margin-right: 16px;
+  }
+}
+.Lexical__checkList {
+  margin-left: 0;
+  .Lexical__nestedListItem & {
+    margin-left: 16px;
+  }
+}
+.Lexical__listItem {
+  margin: 0 0px;
+}
+.Lexical__listItemChecked,
+.Lexical__listItemUnchecked {
+  position: relative;
+  padding-left: calc(var(--font-size) + 0.5rem);
+  padding-right: calc(var(--font-size) + 0.5rem);
+  list-style-type: none;
+  outline: none;
+  vertical-align: middle;
+
+  &:focus,
+  &:focus-within {
+    outline: none;
+    box-shadow: none;
+  }
+}
+.Lexical__listItemChecked {
+  text-decoration: line-through;
+  opacity: 0.4;
+}
+.Lexical__listItemUnchecked:before,
+.Lexical__listItemChecked:before {
+  content: '';
+  --size: 16px;
+  width: var(--size);
+  height: var(--size);
+  left: 0;
+  top: calc(var(--line-height, 1) * var(--font-size) / 2);
+  transform: translateY(-50%);
+  cursor: pointer;
+  background-size: cover;
+  position: absolute;
+}
+.Lexical__listItemUnchecked[dir='rtl']:before,
+.Lexical__listItemChecked[dir='rtl']:before {
+  left: auto;
+  right: 0;
+}
+.Lexical__listItemUnchecked:before {
+  border: 1px solid #999;
+  border-radius: 2px;
+}
+.Lexical__listItemChecked:before {
+  border: 1px solid var(--sn-stylekit-info-color);
+  border-radius: 2px;
+  background-color: var(--sn-stylekit-info-color);
+  background-repeat: no-repeat;
+}
+.Lexical__listItemChecked:after {
+  content: '';
+  cursor: pointer;
+  border-color: var(--sn-stylekit-info-contrast-color);
+  border-style: solid;
+  position: absolute;
+  display: block;
+  width: 5px;
+  height: 11px;
+  --top: calc(var(--line-height, 1) * var(--font-size) / 2);
+  top: calc(var(--top) - 1px);
+  left: 5px;
+  transform: translateY(-50%) rotate(45deg);
+  border-width: 0 2px 2px 0;
+}
+.Lexical__nestedListItem {
+  list-style-type: none;
+  &.Lexical__listItemUnchecked {
+    padding-left: 0;
+  }
+}
+.Lexical__nestedListItem:before,
+.Lexical__nestedListItem:after {
+  display: none;
+}
